@@ -1,0 +1,6 @@
+server/.swagger-codegen-ignore
+server/node_modules/
+node_modules/
+.idea/
+.vs/
+

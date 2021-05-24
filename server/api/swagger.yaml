@@ -1,0 +1,834 @@
+---
+swagger: "2.0"
+info:
+  description: "Configurator API"
+  version: "1.0.0"
+  title: "Configurator backend service"
+host: "localhost:4000"
+basePath: "/api/v1"
+schemes:
+- "http"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /namespaces:
+    get:
+      tags:
+      - "namespace"
+      description: "Returns all the namespaces records"
+      operationId: "getAllNamespaces"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "An array of namespaces"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/namespaceResponse"
+        "405":
+          description: "Method not supported Error. Returned if an unsupported http\
+            \ method is used."
+          schema:
+            $ref: "#/definitions/clientErrorModel"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/serverErrorModel"
+      x-swagger-router-controller: "NamespaceController"
+    post:
+      tags:
+      - "namespace"
+      description: "Creates a namespace"
+      operationId: "createNamespace"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "namespace"
+        description: "The namespace entity details"
+        required: true
+        schema:
+          $ref: "#/definitions/namespaceCreateRequest"
+      responses:
+        "201":
+          description: "success response that the namespace has been created"
+          schema:
+            $ref: "#/definitions/namespaceResponse"
+        "400":
+          description: "Validation Error. Usually caused by a missing or invalid parameter."
+          schema:
+            $ref: "#/definitions/validationErrorModel"
+        "405":
+          description: "Method not supported Error. Returned if an unsupported http\
+            \ method is used."
+          schema:
+            $ref: "#/definitions/clientErrorModel"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/serverErrorModel"
+      x-swagger-router-controller: "NamespaceController"
+  /namespaces/{id}:
+    get:
+      tags:
+      - "namespace"
+      description: "Gets a single namespace"
+      operationId: "getNamespace"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id of the namespace entity that will be fetched"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "success response that the namespace has been fetched"
+          schema:
+            $ref: "#/definitions/namespaceResponse"
+        "404":
+          description: "Resource Not Found"
+          schema:
+            $ref: "#/definitions/resourceNotFoundErrorModel"
+        "405":
+          description: "Method not supported Error. Returned if an unsupported http\
+            \ method is used."
+          schema:
+            $ref: "#/definitions/clientErrorModel"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/serverErrorModel"
+      x-swagger-router-controller: "NamespaceController"
+    delete:
+      tags:
+      - "namespace"
+      description: "Deletes a namespace"
+      operationId: "deleteNamespace"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id of the namespace entity that will be deleted"
+        required: true
+        type: "string"
+      responses:
+        "204":
+          description: "No content"
+        "404":
+          description: "Resource Not Found"
+          schema:
+            $ref: "#/definitions/resourceNotFoundErrorModel"
+        "405":
+          description: "Method not supported Error. Returned if an unsupported http\
+            \ method is used."
+          schema:
+            $ref: "#/definitions/clientErrorModel"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/serverErrorModel"
+      x-swagger-router-controller: "NamespaceController"
+    patch:
+      tags:
+      - "namespace"
+      description: "Patches a namespace"
+      operationId: "patchNamespace"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id of the namespace entity that will be patched"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "namespace"
+        description: "The namespace entity details"
+        required: true
+        schema:
+          $ref: "#/definitions/namespacePatchRequest"
+      responses:
+        "200":
+          description: "success response that the namespace has been patched"
+          schema:
+            $ref: "#/definitions/namespaceResponse"
+        "400":
+          description: "Validation Error. Usually caused by a missing or invalid parameter."
+          schema:
+            $ref: "#/definitions/validationErrorModel"
+        "404":
+          description: "Resource Not Found"
+          schema:
+            $ref: "#/definitions/resourceNotFoundErrorModel"
+        "405":
+          description: "Method not supported Error. Returned if an unsupported http\
+            \ method is used."
+          schema:
+            $ref: "#/definitions/clientErrorModel"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/serverErrorModel"
+      x-swagger-router-controller: "NamespaceController"
+  /namespaces/{namespaceId}/apps:
+    get:
+      tags:
+      - "app"
+      description: "Returns all the app records"
+      operationId: "getAllApps"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "namespaceId"
+        in: "path"
+        description: "The id of the namespace entity that the app is linked to"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "An array of apps"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/appResponse"
+        "405":
+          description: "Method not supported Error. Returned if an unsupported http\
+            \ method is used."
+          schema:
+            $ref: "#/definitions/clientErrorModel"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/serverErrorModel"
+      x-swagger-router-controller: "AppController"
+    post:
+      tags:
+      - "app"
+      description: "Creates an app"
+      operationId: "createApp"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "namespaceId"
+        in: "path"
+        description: "The id of the namespace entity that the app is linked to"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "app"
+        description: "The app entity details"
+        required: true
+        schema:
+          $ref: "#/definitions/appCreateRequest"
+      responses:
+        "201":
+          description: "success response that the app has been created"
+          schema:
+            $ref: "#/definitions/namespaceResponse"
+        "400":
+          description: "Validation Error. Usually caused by a missing or invalid parameter."
+          schema:
+            $ref: "#/definitions/validationErrorModel"
+        "405":
+          description: "Method not supported Error. Returned if an unsupported http\
+            \ method is used."
+          schema:
+            $ref: "#/definitions/clientErrorModel"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/serverErrorModel"
+      x-swagger-router-controller: "AppController"
+  /namespaces/{namespaceId}/apps/{id}:
+    get:
+      tags:
+      - "app"
+      description: "Gets a single app"
+      operationId: "getApp"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "namespaceId"
+        in: "path"
+        description: "The id of the namespace entity that the app is linked to"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "The id of the app entity that will be fetched"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "success response that the namespace has been fetched"
+          schema:
+            $ref: "#/definitions/appResponse"
+        "404":
+          description: "Resource Not Found"
+          schema:
+            $ref: "#/definitions/resourceNotFoundErrorModel"
+        "405":
+          description: "Method not supported Error. Returned if an unsupported http\
+            \ method is used."
+          schema:
+            $ref: "#/definitions/clientErrorModel"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/serverErrorModel"
+      x-swagger-router-controller: "AppController"
+    delete:
+      tags:
+      - "app"
+      description: "Deletes an app"
+      operationId: "deleteApp"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "namespaceId"
+        in: "path"
+        description: "The id of the namespace entity that the app is linked to"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "The id of the app entity that will be deleted"
+        required: true
+        type: "string"
+      responses:
+        "204":
+          description: "No content"
+        "404":
+          description: "Resource Not Found"
+          schema:
+            $ref: "#/definitions/resourceNotFoundErrorModel"
+        "405":
+          description: "Method not supported Error. Returned if an unsupported http\
+            \ method is used."
+          schema:
+            $ref: "#/definitions/clientErrorModel"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/serverErrorModel"
+      x-swagger-router-controller: "AppController"
+    patch:
+      tags:
+      - "app"
+      description: "Patches an app"
+      operationId: "patchApp"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "namespaceId"
+        in: "path"
+        description: "The id of the namespace entity that the app is linked to"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "The id of the app entity that will be patched"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "app"
+        description: "The app entity details"
+        required: true
+        schema:
+          $ref: "#/definitions/appPatchRequest"
+      responses:
+        "200":
+          description: "success response that the app has been patched"
+          schema:
+            $ref: "#/definitions/appResponse"
+        "400":
+          description: "Validation Error. Usually caused by a missing or invalid parameter."
+          schema:
+            $ref: "#/definitions/validationErrorModel"
+        "404":
+          description: "Resource Not Found"
+          schema:
+            $ref: "#/definitions/resourceNotFoundErrorModel"
+        "405":
+          description: "Method not supported Error. Returned if an unsupported http\
+            \ method is used."
+          schema:
+            $ref: "#/definitions/clientErrorModel"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/serverErrorModel"
+      x-swagger-router-controller: "AppController"
+  /users/register:
+    post:
+      tags:
+      - "user"
+      description: "Registers a user"
+      operationId: "registerUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "The user details"
+        required: true
+        schema:
+          $ref: "#/definitions/userRegisterRequest"
+      responses:
+        "201":
+          description: "success response that the user has been registered"
+          schema:
+            $ref: "#/definitions/namespaceResponse"
+        "400":
+          description: "Validation Error. Usually caused by a missing or invalid parameter."
+          schema:
+            $ref: "#/definitions/validationErrorModel"
+        "405":
+          description: "Method not supported Error. Returned if an unsupported http\
+            \ method is used."
+          schema:
+            $ref: "#/definitions/clientErrorModel"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/serverErrorModel"
+      x-swagger-router-controller: "UserController"
+  /users/authenticate:
+    post:
+      tags:
+      - "user"
+      description: "Authenticates a user"
+      operationId: "authenticateUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "The user credentials"
+        required: true
+        schema:
+          $ref: "#/definitions/userAuthenticateRequest"
+      responses:
+        "201":
+          description: "success response that the user has been authenticated"
+          schema:
+            $ref: "#/definitions/userResponse"
+        "400":
+          description: "Validation Error. Usually caused by a missing or invalid parameter."
+          schema:
+            $ref: "#/definitions/validationErrorModel"
+        "405":
+          description: "Method not supported Error. Returned if an unsupported http\
+            \ method is used."
+          schema:
+            $ref: "#/definitions/clientErrorModel"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/serverErrorModel"
+      x-swagger-router-controller: "UserController"
+  /users:
+    get:
+      tags:
+      - "user"
+      description: "Returns all the users records"
+      operationId: "getAllUsers"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "An array of users"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/userResponse"
+        "405":
+          description: "Method not supported Error. Returned if an unsupported http\
+            \ method is used."
+          schema:
+            $ref: "#/definitions/clientErrorModel"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/serverErrorModel"
+      x-swagger-router-controller: "UserController"
+  /users/{id}:
+    get:
+      tags:
+      - "user"
+      description: "Gets a single user"
+      operationId: "getUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id of the user entity that will be fetched"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "success response that the user has been fetched"
+          schema:
+            $ref: "#/definitions/userResponse"
+        "404":
+          description: "Resource Not Found"
+          schema:
+            $ref: "#/definitions/resourceNotFoundErrorModel"
+        "405":
+          description: "Method not supported Error. Returned if an unsupported http\
+            \ method is used."
+          schema:
+            $ref: "#/definitions/clientErrorModel"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/serverErrorModel"
+      x-swagger-router-controller: "UserController"
+definitions:
+  namespaceResponse:
+    type: "object"
+    required:
+    - "_id"
+    - "name"
+    properties:
+      _id:
+        type: "string"
+        description: "The id of the namespace"
+      name:
+        type: "string"
+        description: "The name of the namespace"
+        maxLength: 128
+      items:
+        type: "array"
+        items:
+          $ref: "#/definitions/configItemResponse"
+      createdAt:
+        type: "string"
+        description: "The created date"
+      updatedAt:
+        type: "string"
+        description: "The updated date"
+    example:
+      createdAt: "createdAt"
+      name: "name"
+      _id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+      items:
+      - value: "value"
+        key: "key"
+      - value: "value"
+        key: "key"
+      updatedAt: "updatedAt"
+  namespaceCreateRequest:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+        description: "The name of the namespace"
+        maxLength: 128
+      items:
+        type: "array"
+        items:
+          $ref: "#/definitions/configItemCreateRequest"
+  namespacePatchRequest:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "The name of the namespace"
+        maxLength: 128
+      items:
+        type: "array"
+        items:
+          $ref: "#/definitions/configItemCreateRequest"
+  appResponse:
+    type: "object"
+    required:
+    - "_id"
+    - "name"
+    - "namespaceId"
+    properties:
+      _id:
+        type: "string"
+        description: "The id of the app"
+      name:
+        type: "string"
+        description: "The name of the app"
+        maxLength: 128
+      namespaceId:
+        type: "string"
+        description: "The id of the namespace that the app will be linked to"
+        maxLength: 128
+      items:
+        type: "array"
+        items:
+          $ref: "#/definitions/configItemResponse"
+      createdAt:
+        type: "string"
+        description: "The created date"
+      updatedAt:
+        type: "string"
+        description: "The updated date"
+    example:
+      createdAt: "createdAt"
+      namespaceId: "namespaceId"
+      name: "name"
+      _id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+      items:
+      - value: "value"
+        key: "key"
+      - value: "value"
+        key: "key"
+      updatedAt: "updatedAt"
+  appCreateRequest:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      name:
+        type: "string"
+        description: "The name of the app"
+        maxLength: 128
+      items:
+        type: "array"
+        items:
+          $ref: "#/definitions/configItemCreateRequest"
+  appPatchRequest:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "The name of the namespace"
+        maxLength: 128
+      items:
+        type: "array"
+        items:
+          $ref: "#/definitions/configItemCreateRequest"
+  configItemResponse:
+    type: "object"
+    required:
+    - "key"
+    - "value"
+    properties:
+      key:
+        type: "string"
+        description: "The item key"
+        maxLength: 128
+      value:
+        type: "string"
+        description: "The item value"
+        maxLength: 128
+    example:
+      value: "value"
+      key: "key"
+  configItemCreateRequest:
+    type: "object"
+    required:
+    - "key"
+    - "value"
+    properties:
+      key:
+        type: "string"
+        description: "The item key"
+        maxLength: 128
+      value:
+        type: "string"
+        description: "The item value"
+        maxLength: 128
+  userResponse:
+    type: "object"
+    required:
+    - "_id"
+    - "firstName"
+    - "lastName"
+    - "username"
+    properties:
+      _id:
+        type: "string"
+        description: "The id of the user"
+      firstName:
+        type: "string"
+        description: "The first name of the user"
+        maxLength: 128
+      lastName:
+        type: "string"
+        description: "The last name of the user"
+        maxLength: 128
+      username:
+        type: "string"
+        format: "email"
+        description: "The username of the user"
+        maxLength: 128
+      createdAt:
+        type: "string"
+        description: "The created date"
+      updatedAt:
+        type: "string"
+        description: "The updated date"
+    example:
+      firstName: "firstName"
+      lastName: "lastName"
+      createdAt: "createdAt"
+      _id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+      username: "username"
+      updatedAt: "updatedAt"
+  userRegisterRequest:
+    type: "object"
+    required:
+    - "firstName"
+    - "lastName"
+    - "password"
+    - "username"
+    properties:
+      firstName:
+        type: "string"
+        description: "The first name of the user"
+        maxLength: 128
+      lastName:
+        type: "string"
+        description: "The last name of the user"
+        maxLength: 128
+      username:
+        type: "string"
+        format: "email"
+        description: "The username of the user"
+        maxLength: 128
+      password:
+        type: "string"
+        format: "password"
+        description: "The password of the user"
+        minLength: 6
+        maxLength: 10
+  userAuthenticateRequest:
+    type: "object"
+    required:
+    - "password"
+    - "username"
+    properties:
+      username:
+        type: "string"
+        format: "email"
+        description: "The username of the user"
+        maxLength: 128
+      password:
+        type: "string"
+        format: "password"
+        description: "The password of the user"
+        minLength: 6
+        maxLength: 10
+  serverErrorModel:
+    type: "object"
+    required:
+    - "code"
+    - "message"
+    properties:
+      code:
+        type: "string"
+      message:
+        type: "string"
+      stack:
+        type: "string"
+  clientErrorModel:
+    type: "object"
+    required:
+    - "code"
+    - "message"
+    properties:
+      code:
+        type: "string"
+      message:
+        type: "string"
+      stack:
+        type: "string"
+  authorizationErrorModel:
+    type: "object"
+    required:
+    - "message"
+    - "name"
+    properties:
+      name:
+        type: "string"
+      message:
+        type: "string"
+  resourceNotFoundErrorModel:
+    type: "object"
+    required:
+    - "execptionMessage"
+    - "message"
+    - "name"
+    properties:
+      name:
+        type: "string"
+      message:
+        type: "string"
+      execptionMessage:
+        type: "string"
+  validationErrorModel:
+    type: "object"
+    required:
+    - "code"
+    - "message"
+    properties:
+      code:
+        type: "string"
+      message:
+        type: "string"
+      errors:
+        type: "array"
+        items:
+          $ref: "#/definitions/validationErrorSingleModel"
+  validationErrorSingleModel:
+    type: "object"
+    required:
+    - "code"
+    - "message"
+    - "path"
+    properties:
+      code:
+        type: "string"
+      message:
+        type: "string"
+      path:
+        type: "array"
+        items:
+          type: "string"
+      description:
+        type: "string"

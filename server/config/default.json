@@ -1,0 +1,12 @@
+{
+  "logging": [
+    {
+      "name": "file",
+      "level": "debug",
+      "filename": "application.log"
+    }
+  ],
+  "bodyParser": {
+    "limit": "100kb"
+  }
+}
