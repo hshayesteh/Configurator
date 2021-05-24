@@ -5,7 +5,7 @@ var namespaceService = require('../service/NamespaceService');
 module.exports = {
 
     /**
-     * Create a new namespace
+     * Creates a new namespace
      *
      * @param {ClientRequest} req - The http request object
      * @param {IncomingMessage} res - The http response object 
@@ -23,7 +23,7 @@ module.exports = {
     },
 
     /**
-     * Delete a new namespace
+     * Deletes a namespace
      *
      * @param {ClientRequest} req - The http request object
      * @param {IncomingMessage} res - The http response object
@@ -94,5 +94,4 @@ module.exports = {
             next(e);
         }
     }
-
 };

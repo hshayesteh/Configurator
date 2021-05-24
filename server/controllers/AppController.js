@@ -1,64 +1,134 @@
 'use strict';
 
-var utils = require('../utils/writer.js');
-var App = require('../service/AppService');
+const appService = require('../service/AppService');
 
-module.exports.createApp = function createApp (req, res, next) {
-  var namespaceId = req.swagger.params['namespaceId'].value;
-  var app = req.swagger.params['app'].value;
-  App.createApp(namespaceId,app)
-    .then(function (response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function (response) {
-      utils.writeJson(res, response);
-    });
-};
+module.exports = {
 
-module.exports.deleteApp = function deleteApp (req, res, next) {
-  var namespaceId = req.swagger.params['namespaceId'].value;
-  var id = req.swagger.params['id'].value;
-  App.deleteApp(namespaceId,id)
-    .then(function (response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function (response) {
-      utils.writeJson(res, response);
-    });
-};
+    /**
+     * Creates a new app
+     *
+     * @param {ClientRequest} req - The http request object
+     * @param {IncomingMessage} res - The http response object
+     * @param {function} next - The callback used to pass control to the next action/middleware
+     */
+    createApp: async function(req, res, next) {
+        let namespaceId = req.swagger.params['namespaceId'].value;
+        let app = req.swagger.params['app'].value;
 
-module.exports.getAllApps = function getAllApps (req, res, next) {
-  var namespaceId = req.swagger.params['namespaceId'].value;
-  App.getAllApps(namespaceId)
-    .then(function (response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function (response) {
-      utils.writeJson(res, response);
-    });
-};
+        try {
+            let namespace = await appService.createApp(namespaceId, app);
+            res.statusCode = 201;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(namespace);
+        } catch (e) {
+            next(e);
+        }
 
-module.exports.getApp = function getApp (req, res, next) {
-  var namespaceId = req.swagger.params['namespaceId'].value;
-  var id = req.swagger.params['id'].value;
-  App.getApp(namespaceId,id)
-    .then(function (response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function (response) {
-      utils.writeJson(res, response);
-    });
-};
+    },
 
-module.exports.patchApp = function patchApp (req, res, next) {
-  var namespaceId = req.swagger.params['namespaceId'].value;
-  var id = req.swagger.params['id'].value;
-  var app = req.swagger.params['app'].value;
-  App.patchApp(namespaceId,id,app)
-    .then(function (response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function (response) {
-      utils.writeJson(res, response);
-    });
+    /**
+     * Deletes an app
+     *
+     * @param {ClientRequest} req - The http request object
+     * @param {IncomingMessage} res - The http response object
+     * @param {function} next - The callback used to pass control to the next action/middleware
+     */
+    deleteApp: async function(req, res, next) {
+        let namespaceId = req.swagger.params['namespaceId'].value;
+        let id = req.swagger.params['id'].value;
+
+        try {
+
+            await appService.deleteApp(namespaceId, id);
+            res.statusCode = 204;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(namespace);
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    /**
+     * Gets all the app entities
+     *
+     * @param {ClientRequest} req - The http request object
+     * @param {IncomingMessage} res - The http response object
+     * @param {function} next - The callback used to pass control to the next action/middleware
+     */
+    getAllApps: async function(req, res, next) {
+        let namespaceId = req.swagger.params['namespaceId'].value;
+
+        try {
+            let namespaces = await appService.getAllApps(namespaceId);
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(namespaces);
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    /**
+     * Gets a single app
+     *
+     * @param {ClientRequest} req - The http request object
+     * @param {IncomingMessage} res - The http response object
+     * @param {function} next - The callback used to pass control to the next action/middleware
+     */
+    getApp: async function(req, res, next) {
+        let namespaceId = req.swagger.params['namespaceId'].value;
+        let id = req.swagger.params['id'].value;
+
+        try {
+            let namespace = await appService.getApp(namespaceId, id);
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(namespace);
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    /**
+     * Returns the aggregated config items for a given app
+     *
+     * @param {ClientRequest} req - The http request object
+     * @param {IncomingMessage} res - The http response object
+     * @param {function} next - The callback used to pass control to the next action/middleware
+     */
+    getAppConfig: async function(req, res, next) {
+        let namespaceId = req.swagger.params['namespaceId'].value;
+        let id = req.swagger.params['id'].value;
+
+        try {
+            let namespace = await appService.getAppConfig(namespaceId, id);
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(namespace);
+        } catch (e) {
+            next(e);
+        }
+    },
+
+    /**
+     * Patches an app
+     *
+     * @param {ClientRequest} req - The http request object
+     * @param {IncomingMessage} res - The http response object
+     * @param {function} next - The callback used to pass control to the next action/middleware
+     */
+    patchApp: async function(req, res, next) {
+        let namespaceId = req.swagger.params['namespaceId'].value;
+        let id = req.swagger.params['id'].value;
+        let app = req.swagger.params['app'].value;
+
+        try {
+            let namespace = await appService.patchApp(namespaceId, id, app);
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(namespace);
+        } catch (e) {
+            next(e);
+        }
+    }
 };

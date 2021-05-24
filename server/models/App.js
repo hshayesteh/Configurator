@@ -10,15 +10,16 @@ const configItem = new schema(
     }
 );
 
-const namespace = new schema(
-  {
-    name: {type: String, required: true},
-    items: [configItem]
-  },
-  {timestamps: {createdAt: 'createdAt', updatedAt: 'updatedAt'}}
+const app = new schema(
+    {
+        namespaceId: { type: String, required: true },
+        name: { type: String, required: true },
+        items: [configItem]
+    },
+    { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
 );
 
 /**
  * Defines the schema for the namespace model
  */
-module.exports = mongoose.model('Namespace', namespace);
+module.exports = mongoose.model('App', app);

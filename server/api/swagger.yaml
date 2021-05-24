@@ -386,6 +386,49 @@ paths:
           schema:
             $ref: "#/definitions/serverErrorModel"
       x-swagger-router-controller: "AppController"
+      
+  /namespaces/{namespaceId}/apps/{id}/configs:
+    get:
+      tags:
+      - "app"
+      description: "Returns the aggregated config items for a given app"
+      operationId: "getAppConfig"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "namespaceId"
+        in: "path"
+        description: "The id of the namespace entity that the app is linked to"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        description: "The id of the app entity whose config will be calculated"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "success response that the namespace has been fetched"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/configItemResponse"
+        "404":
+          description: "Resource Not Found"
+          schema:
+            $ref: "#/definitions/resourceNotFoundErrorModel"
+        "405":
+          description: "Method not supported Error. Returned if an unsupported http\
+            \ method is used."
+          schema:
+            $ref: "#/definitions/clientErrorModel"
+        default:
+          description: "unexpected error"
+          schema:
+            $ref: "#/definitions/serverErrorModel"
+      x-swagger-router-controller: "AppController"      
   /users/register:
     post:
       tags:
@@ -642,6 +685,7 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/configItemCreateRequest"
+    
   configItemResponse:
     type: "object"
     required:

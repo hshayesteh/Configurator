@@ -1,7 +1,8 @@
 'use strict';
-var Namespace = require('../models/Namespace');
-var namespaceValidator = require('./Validators/NamespaceValidator');
-var ResourceNotFoundError = require('../utils/error/ResourceNotFoundError');
+const Namespace = require('../models/Namespace');
+const namespaceValidator = require('./Validators/NamespaceValidator');
+const configItemsValidator = require('./Validators/ConfigItemsValidator');
+const ResourceNotFoundError = require('../utils/error/ResourceNotFoundError');
 
 module.exports = {
 
@@ -13,8 +14,12 @@ module.exports = {
     * @returns {namespaceResponse} 
      */
     createNamespace: async function (namespace) {
-        // validate that a namespace with the same key does not already exist
+        
         await namespaceValidator.uniqueNamespaceValidator(namespace.name);
+
+        if (namespace.items) {
+            configItemsValidator.configItemsUniqueValidator(namespace.items);
+        }
 
         let entity = new Namespace(namespace);
 
@@ -51,6 +56,9 @@ module.exports = {
         }
 
         if (namespace.items) {
+
+            configItemsValidator.configItemsUniqueValidator(namespace.items);
+
             existingNamespace.items = namespace.items;
         }
 
