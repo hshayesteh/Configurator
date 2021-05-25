@@ -8,7 +8,6 @@ const swaggerTools = require('swagger-tools');
 const jsyaml = require('js-yaml');
 const config = require('config');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const errorHandler = require('./utils/error/ErrorHandler');
 
 // swaggerRouter configuration
@@ -50,8 +49,6 @@ swaggerTools.initializeMiddleware(swaggerDoc,
 
         // Serve the Swagger documents and Swagger UI
         app.use(middleware.swaggerUi());
-
-        app.use(bodyParser.json());
 
         app.use(errorHandler.onError);
 

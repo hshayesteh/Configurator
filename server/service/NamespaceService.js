@@ -89,6 +89,7 @@ module.exports = {
      */
     getAllNamespaces: async function () {
         let getAllResult = await Namespace.find().limit(100);
+        
         return getAllResult;
     }
 };
