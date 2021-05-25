@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
+const cors = require('cors');
 const app = require('express')();
 const swaggerTools = require('swagger-tools');
 const jsyaml = require('js-yaml');
@@ -32,14 +33,12 @@ var swaggerDoc = jsyaml.safeLoad(spec);
 // Initialize the Swagger middleware
 swaggerTools.initializeMiddleware(swaggerDoc,
     function(middleware) {
-        app.get('/test',
-            (req, res) => {
-                res.setHeader('Content-Type', 'application/json');
-                res.json({ sss: "sfsf" });
-            });
 
         // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
         app.use(middleware.swaggerMetadata());
+        
+        // CORS
+        app.use(cors());
 
         // Validate Swagger requests
         app.use(middleware.swaggerValidator());
