@@ -13,26 +13,27 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "config": "^3.3.6",
     "connect": "^3.2.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "js-yaml": "^3.3.0",
-    "swagger-tools": "^0.10.3",
-    "config": "^3.3.6",
-    "mongoose": "^5.12.10",
-    "body-parser": "^1.19.0",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
-    "lodash": "^4.17.21"
+    "mongoose": "^5.12.10",
+    "swagger-tools": "^0.10.3"
   },
   "devDependencies": {
-    "mocha": "2.4.5",
     "chai": "3.5.0",
-    "sinon": "1.17.4",
-    "supertest": "1.2.0",
-    "xunit-file": "0.0.9",
+    "json-schema-deref": "^0.3.2",
     "leche": "^2.1.1",
-    "sinon-chai": "^2.8.0",
+    "mocha": "2.4.5",
     "nock": "^8.0.0",
+    "sinon": "1.17.4",
+    "sinon-chai": "^2.8.0",
+    "supertest": "1.2.0",
     "swagger-test-templates": "^1.2.0",
-    "json-schema-deref": "^0.3.2"
+    "xunit-file": "0.0.9"
   }
 }
